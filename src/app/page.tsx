@@ -1,46 +1,40 @@
 'use client';
-// pages/index.js
-import {
-	useState,
-	useEffect,
-	SetStateAction,
-	AwaitedReactNode,
-	JSXElementConstructor,
-	Key,
-	ReactElement,
-	ReactNode,
-	ReactPortal,
-} from 'react';
+
+import React, { useState } from 'react';
 import Papa from 'papaparse';
-import { UploadCloud, Download, Moon, Sun } from 'lucide-react';
+import { UploadCloud, Download } from 'lucide-react';
+
+interface ParsedData {
+	firstname: string;
+	lastname: string;
+	phone: string;
+	email: string;
+}
 
 export default function Home() {
-	const [csvType, setCsvType] = useState('partiful');
-	const [parsedData, setParsedData] = useState(null);
+	const [csvType, setCsvType] = useState<'partiful' | 'luma' | 'eventbrite'>(
+		'partiful'
+	);
+	const [parsedData, setParsedData] = useState<ParsedData[] | null>(null);
 
-	const handleDrop = (e: any) => {
+	const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
 		e.preventDefault();
 		const file = e.dataTransfer.files[0];
 		parseCSV(file);
 	};
 
-	const handleFileInput = (e: any) => {
-		const file = e.target.files[0];
-		parseCSV(file);
+	const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (file) {
+			parseCSV(file);
+		}
 	};
 
-	const parseCSV = (file: any) => {
+	const parseCSV = (file: File) => {
 		Papa.parse(file, {
 			header: true,
 			complete: (results) => {
-				let jsonData:
-					| SetStateAction<null>
-					| {
-							firstname: String;
-							lastname: String;
-							phone: String;
-							email: String;
-					  }[];
+				let jsonData: ParsedData[];
 				switch (csvType) {
 					case 'partiful':
 						jsonData = results.data.map((row: any) => {
@@ -97,7 +91,7 @@ export default function Home() {
 	};
 
 	return (
-		<div className={`min-h-screen `}>
+		<div className="min-h-screen">
 			<div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
 				<div className="max-w-3xl mx-auto">
 					<div className="flex justify-between items-center mb-8">
@@ -112,7 +106,9 @@ export default function Home() {
 						</label>
 						<select
 							value={csvType}
-							onChange={(e) => setCsvType(e.target.value)}
+							onChange={(e) =>
+								setCsvType(e.target.value as 'partiful' | 'luma' | 'eventbrite')
+							}
 							className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors duration-200"
 						>
 							<option value="partiful">Partiful</option>
@@ -175,87 +171,25 @@ export default function Home() {
 										</tr>
 									</thead>
 									<tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-										{parsedData.map(
-											(
-												item: {
-													firstname:
-														| string
-														| number
-														| bigint
-														| boolean
-														| ReactElement<
-																any,
-																string | JSXElementConstructor<any>
-														  >
-														| Iterable<ReactNode>
-														| ReactPortal
-														| Promise<AwaitedReactNode>
-														| null
-														| undefined;
-													lastname:
-														| string
-														| number
-														| bigint
-														| boolean
-														| ReactElement<
-																any,
-																string | JSXElementConstructor<any>
-														  >
-														| Iterable<ReactNode>
-														| ReactPortal
-														| Promise<AwaitedReactNode>
-														| null
-														| undefined;
-													phone:
-														| string
-														| number
-														| bigint
-														| boolean
-														| ReactElement<
-																any,
-																string | JSXElementConstructor<any>
-														  >
-														| Iterable<ReactNode>
-														| ReactPortal
-														| Promise<AwaitedReactNode>
-														| null
-														| undefined;
-													email:
-														| string
-														| number
-														| bigint
-														| boolean
-														| ReactElement<
-																any,
-																string | JSXElementConstructor<any>
-														  >
-														| Iterable<ReactNode>
-														| ReactPortal
-														| Promise<AwaitedReactNode>
-														| null
-														| undefined;
-												},
-												index: Key | null | undefined
-											) => (
-												<tr
-													key={index}
-													className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
-												>
-													<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-														{item.firstname}
-													</td>
-													<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-														{item.lastname}
-													</td>
-													<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-														{item.phone}
-													</td>
-													<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-														{item.email}
-													</td>
-												</tr>
-											)
-										)}
+										{parsedData.map((item, index) => (
+											<tr
+												key={index}
+												className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+											>
+												<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+													{item.firstname}
+												</td>
+												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+													{item.lastname}
+												</td>
+												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+													{item.phone}
+												</td>
+												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+													{item.email}
+												</td>
+											</tr>
+										))}
 									</tbody>
 								</table>
 							</div>
