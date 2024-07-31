@@ -1,6 +1,16 @@
 'use client';
 // pages/index.js
-import { useState, useEffect } from 'react';
+import {
+	useState,
+	useEffect,
+	SetStateAction,
+	AwaitedReactNode,
+	JSXElementConstructor,
+	Key,
+	ReactElement,
+	ReactNode,
+	ReactPortal,
+} from 'react';
 import Papa from 'papaparse';
 import { UploadCloud, Download, Moon, Sun } from 'lucide-react';
 
@@ -8,25 +18,32 @@ export default function Home() {
 	const [csvType, setCsvType] = useState('partiful');
 	const [parsedData, setParsedData] = useState(null);
 
-	const handleDrop = (e) => {
+	const handleDrop = (e: any) => {
 		e.preventDefault();
 		const file = e.dataTransfer.files[0];
 		parseCSV(file);
 	};
 
-	const handleFileInput = (e) => {
+	const handleFileInput = (e: any) => {
 		const file = e.target.files[0];
 		parseCSV(file);
 	};
 
-	const parseCSV = (file) => {
+	const parseCSV = (file: any) => {
 		Papa.parse(file, {
 			header: true,
 			complete: (results) => {
-				let jsonData;
+				let jsonData:
+					| SetStateAction<null>
+					| {
+							firstname: String;
+							lastname: String;
+							phone: String;
+							email: String;
+					  }[];
 				switch (csvType) {
 					case 'partiful':
-						jsonData = results.data.map((row) => {
+						jsonData = results.data.map((row: any) => {
 							const nameParts = row.Name.split(/\s+/);
 							return {
 								firstname: nameParts[0] || '',
@@ -37,7 +54,7 @@ export default function Home() {
 						});
 						break;
 					case 'luma':
-						jsonData = results.data.map((row) => {
+						jsonData = results.data.map((row: any) => {
 							const nameParts = row.name.split(/\s+/);
 							return {
 								firstname: nameParts[0] || '',
@@ -48,7 +65,7 @@ export default function Home() {
 						});
 						break;
 					case 'eventbrite':
-						jsonData = results.data.map((row) => ({
+						jsonData = results.data.map((row: any) => ({
 							firstname: row['First Name'] || '',
 							lastname: row['Last Name'] || '',
 							phone: row['Cell Phone'] || '',
@@ -158,25 +175,87 @@ export default function Home() {
 										</tr>
 									</thead>
 									<tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-										{parsedData.map((item, index) => (
-											<tr
-												key={index}
-												className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
-											>
-												<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-													{item.firstname}
-												</td>
-												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-													{item.lastname}
-												</td>
-												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-													{item.phone}
-												</td>
-												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-													{item.email}
-												</td>
-											</tr>
-										))}
+										{parsedData.map(
+											(
+												item: {
+													firstname:
+														| string
+														| number
+														| bigint
+														| boolean
+														| ReactElement<
+																any,
+																string | JSXElementConstructor<any>
+														  >
+														| Iterable<ReactNode>
+														| ReactPortal
+														| Promise<AwaitedReactNode>
+														| null
+														| undefined;
+													lastname:
+														| string
+														| number
+														| bigint
+														| boolean
+														| ReactElement<
+																any,
+																string | JSXElementConstructor<any>
+														  >
+														| Iterable<ReactNode>
+														| ReactPortal
+														| Promise<AwaitedReactNode>
+														| null
+														| undefined;
+													phone:
+														| string
+														| number
+														| bigint
+														| boolean
+														| ReactElement<
+																any,
+																string | JSXElementConstructor<any>
+														  >
+														| Iterable<ReactNode>
+														| ReactPortal
+														| Promise<AwaitedReactNode>
+														| null
+														| undefined;
+													email:
+														| string
+														| number
+														| bigint
+														| boolean
+														| ReactElement<
+																any,
+																string | JSXElementConstructor<any>
+														  >
+														| Iterable<ReactNode>
+														| ReactPortal
+														| Promise<AwaitedReactNode>
+														| null
+														| undefined;
+												},
+												index: Key | null | undefined
+											) => (
+												<tr
+													key={index}
+													className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+												>
+													<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+														{item.firstname}
+													</td>
+													<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+														{item.lastname}
+													</td>
+													<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+														{item.phone}
+													</td>
+													<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+														{item.email}
+													</td>
+												</tr>
+											)
+										)}
 									</tbody>
 								</table>
 							</div>
