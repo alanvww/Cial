@@ -1,22 +1,23 @@
+import '@radix-ui/themes/styles.css';
+import { Theme } from '@radix-ui/themes';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-
-const inter = Inter({ subsets: ['latin'] });
+import '@/app/globals.css';
 
 export const metadata: Metadata = {
-	title: 'CSV Parser',
-	description: '',
+	title: 'User Management App',
+	description: 'A Next.js app for managing users',
 };
 
 export default function RootLayout({
 	children,
-}: Readonly<{
+}: {
 	children: React.ReactNode;
-}>) {
+}) {
 	return (
 		<html lang="en">
-			<body className={inter.className}>{children}</body>
+			<body>
+				<Theme>{children}</Theme>
+			</body>
 		</html>
 	);
 }
