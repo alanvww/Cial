@@ -155,15 +155,13 @@ export function TableView({
 							className="cursor-pointer hover:bg-gray-50"
 						>
 							<Table.Cell className="py-3 px-4">
-								<div className="flex items-center justify-center h-full">
-									<Image
-										src={user.avatarUrl || '/avatar.png'}
-										alt={`${user.firstName} ${user.lastName}`}
-										className="w-8 h-8 rounded-full"
-										width={32}
-										height={32}
-									/>
-								</div>
+								<Image
+									src={user.avatarUrl || '/avatar.png'}
+									alt={`${user.firstName} ${user.lastName}`}
+									className="w-8 h-8 rounded-full"
+									width={32}
+									height={32}
+								/>
 							</Table.Cell>
 							<Table.Cell className="py-3 px-4">
 								<div className="flex items-center h-full">
