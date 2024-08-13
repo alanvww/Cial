@@ -1,6 +1,7 @@
 // types/index.ts
 export interface User {
 	id: string;
+	avatarUrl: string;
 	firstName: string;
 	lastName: string;
 	email: string;
@@ -13,12 +14,12 @@ export interface User {
 		dateJoined: string;
 	}[];
 	customFields: {
-		occupation: string;
-		socialMedia: {
-			linkedin: string;
-			twitter: string;
+		socialMedia?: {
+			linkedin?: string;
+			twitter?: string;
 		};
-		interests: string[];
+		occupation?: string;
+		interests?: string[];
 	};
 	metrics: {
 		loginCount: number;

@@ -4,6 +4,7 @@ import { User } from '@/types';
 export const users: User[] = [
 	{
 		id: 'user-001',
+		avatarUrl: '/avatar.png',
 		firstName: 'John',
 		lastName: 'Doe',
 		email: 'john.doe@example.com',
@@ -48,6 +49,7 @@ export const users: User[] = [
 	},
 	{
 		id: 'user-002',
+		avatarUrl: '/avatar.png',
 		firstName: 'Jane',
 		lastName: 'Smith',
 		email: 'jane.smith@example.com',
@@ -87,6 +89,7 @@ export const users: User[] = [
 	},
 	{
 		id: 'user-003',
+		avatarUrl: '/avatar.png',
 		firstName: 'Michael',
 		lastName: 'Johnson',
 		email: 'michael.johnson@example.com',
@@ -131,6 +134,7 @@ export const users: User[] = [
 	},
 	{
 		id: 'user-004',
+		avatarUrl: '/avatar.png',
 		firstName: 'Emily',
 		lastName: 'Brown',
 		email: 'emily.brown@example.com',
@@ -166,6 +170,7 @@ export const users: User[] = [
 	},
 	{
 		id: 'user-005',
+		avatarUrl: '/avatar.png',
 		firstName: 'David',
 		lastName: 'Lee',
 		email: 'david.lee@example.com',
@@ -210,6 +215,7 @@ export const users: User[] = [
 	},
 	{
 		id: 'user-006',
+		avatarUrl: '/avatar.png',
 		firstName: 'Sarah',
 		lastName: 'Wilson',
 		email: 'sarah.wilson@example.com',
@@ -249,6 +255,7 @@ export const users: User[] = [
 	},
 	{
 		id: 'user-007',
+		avatarUrl: '/avatar.png',
 		firstName: 'Robert',
 		lastName: 'Taylor',
 		email: 'robert.taylor@example.com',
@@ -293,6 +300,7 @@ export const users: User[] = [
 	},
 	{
 		id: 'user-008',
+		avatarUrl: '/avatar.png',
 		firstName: 'Laura',
 		lastName: 'Martinez',
 		email: 'laura.martinez@example.com',
@@ -328,6 +336,7 @@ export const users: User[] = [
 	},
 	{
 		id: 'user-009',
+		avatarUrl: '/avatar.png',
 		firstName: 'Daniel',
 		lastName: 'Kim',
 		email: 'daniel.kim@example.com',
@@ -372,6 +381,7 @@ export const users: User[] = [
 	},
 	{
 		id: 'user-010',
+		avatarUrl: '/avatar.png',
 		firstName: 'Olivia',
 		lastName: 'Garcia',
 		email: 'olivia.garcia@example.com',

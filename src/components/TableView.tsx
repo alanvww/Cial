@@ -1,22 +1,36 @@
 // components/TableView.tsx
 'use client';
 
+import { useState, useCallback } from 'react';
 import { Table, Button, DropdownMenu, Tooltip } from '@radix-ui/themes';
 import { User } from '@/types';
-import { Plus, Check, Copy } from 'lucide-react';
-import { useState, useCallback } from 'react';
+import { LinkedInLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons';
+import { Check, Copy, Settings } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 interface TableProps {
 	users: User[];
-	onUserClick: (user: User) => void;
 	customFields: string[];
 	availableFields: string[];
 	onCustomFieldsChange: (fields: string[]) => void;
 }
 
+const getInterestColor = (index: number) => {
+	const colors = [
+		'bg-red-200 text-red-800',
+		'bg-blue-200 text-blue-800',
+		'bg-green-200 text-green-800',
+		'bg-yellow-200 text-yellow-800',
+		'bg-purple-200 text-purple-800',
+		'bg-pink-200 text-pink-800',
+		'bg-indigo-200 text-indigo-800',
+	];
+	return colors[index % colors.length];
+};
+
 export function TableView({
 	users,
-	onUserClick,
 	customFields,
 	availableFields,
 	onCustomFieldsChange,
@@ -26,6 +40,7 @@ export function TableView({
 		y: number;
 		content: string;
 	} | null>(null);
+	const router = useRouter();
 
 	const getNestedValue = (obj: any, path: string) => {
 		return path.split('.').reduce((prev, curr) => prev && prev[curr], obj);
@@ -78,25 +93,40 @@ export function TableView({
 		</Tooltip>
 	);
 
+	const handleRowClick = (userId: string) => {
+		router.push(`/user/${userId}`);
+	};
+
 	return (
 		<div className="overflow-x-auto">
-			<Table.Root variant="surface" className="w-full">
+			<Table.Root className="w-full">
 				<Table.Header>
 					<Table.Row>
-						<Table.ColumnHeaderCell width="15%">Name</Table.ColumnHeaderCell>
-						<Table.ColumnHeaderCell width="20%">Email</Table.ColumnHeaderCell>
-						<Table.ColumnHeaderCell width="15%">Phone</Table.ColumnHeaderCell>
-						<Table.ColumnHeaderCell width="10%">Type</Table.ColumnHeaderCell>
+						<Table.ColumnHeaderCell className="py-3 px-4">
+							Avatar
+						</Table.ColumnHeaderCell>
+						<Table.ColumnHeaderCell className="py-3 px-4">
+							Name
+						</Table.ColumnHeaderCell>
+						<Table.ColumnHeaderCell className="py-3 px-4">
+							Email
+						</Table.ColumnHeaderCell>
+						<Table.ColumnHeaderCell className="py-3 px-4">
+							Phone
+						</Table.ColumnHeaderCell>
+						<Table.ColumnHeaderCell className="py-3 px-4">
+							Tier
+						</Table.ColumnHeaderCell>
 						{customFields.map((field) => (
-							<Table.ColumnHeaderCell key={field} width="15%">
+							<Table.ColumnHeaderCell key={field} className="py-3 px-4">
 								{formatHeaderText(field)}
 							</Table.ColumnHeaderCell>
 						))}
-						<Table.ColumnHeaderCell width="5%" className="text-right">
+						<Table.ColumnHeaderCell className="py-3 px-4 text-right">
 							<DropdownMenu.Root>
 								<DropdownMenu.Trigger>
-									<Button variant="outline" size="1">
-										<Plus />
+									<Button variant="ghost" size="1">
+										<Settings size={16} />
 									</Button>
 								</DropdownMenu.Trigger>
 								<DropdownMenu.Content>
@@ -121,45 +151,99 @@ export function TableView({
 					{users.map((user) => (
 						<Table.Row
 							key={user.id}
-							onClick={() => onUserClick(user)}
-							className="cursor-pointer hover:bg-gray-100"
+							onClick={() => handleRowClick(user.id)}
+							className="cursor-pointer hover:bg-gray-50"
 						>
-							<Table.Cell>
-								{renderCell(`${user.firstName} ${user.lastName}`)}
+							<Table.Cell className="py-3 px-4">
+								<div className="flex items-center justify-center h-full">
+									<Image
+										src={user.avatarUrl || '/avatar.png'}
+										alt={`${user.firstName} ${user.lastName}`}
+										className="w-8 h-8 rounded-full"
+										width={32}
+										height={32}
+									/>
+								</div>
 							</Table.Cell>
-							<Table.Cell>{renderCell(user.email)}</Table.Cell>
-							<Table.Cell>{renderCell(user.phone)}</Table.Cell>
-							<Table.Cell>
-								{renderCell(
+							<Table.Cell className="py-3 px-4">
+								<div className="flex items-center h-full">
+									{renderCell(`${user.firstName} ${user.lastName}`)}
+								</div>
+							</Table.Cell>
+							<Table.Cell className="py-3 px-4">
+								<div className="flex items-center h-full">
+									{renderCell(user.email)}
+								</div>
+							</Table.Cell>
+							<Table.Cell className="py-3 px-4">
+								<div className="flex items-center h-full">
+									{renderCell(user.phone)}
+								</div>
+							</Table.Cell>
+							<Table.Cell className="py-3 px-4">
+								<div className="flex items-center h-full">
 									<span
-										className={`
-                      inline-block
-                      px-2
-                      py-1
-                      rounded-full
-                      text-xs
-                      font-semibold
-                      text-white
-                      ${
-												user.accountType === 'paid'
-													? 'bg-green-500'
-													: 'bg-gray-500'
-											}
-                    `}
+										className={`px-2 py-1 rounded-full text-xs font-semibold ${
+											user.accountType === 'paid'
+												? 'bg-green-500 text-white'
+												: 'bg-gray-200 text-gray-800'
+										}`}
 									>
-										{user.accountType}
+										{user.accountType === 'paid' ? 'Paid' : 'Free'}
 									</span>
-								)}
+								</div>
 							</Table.Cell>
 							{customFields.map((field) => {
-								const content = JSON.stringify(
-									getNestedValue(user.customFields, field)
-								);
+								const content = getNestedValue(user.customFields, field);
 								return (
-									<Table.Cell key={field}>{renderCell(content)}</Table.Cell>
+									<Table.Cell key={field} className="py-3 px-4">
+										<div className="flex items-center h-full">
+											{field === 'socialMedia' ? (
+												<div className="flex space-x-2">
+													{content.linkedin && (
+														<a
+															href={content.linkedin}
+															target="_blank"
+															rel="noopener noreferrer"
+															className="text-blue-600 hover:underline"
+														>
+															<LinkedInLogoIcon />
+														</a>
+													)}
+													{content.twitter && (
+														<a
+															href={content.twitter}
+															target="_blank"
+															rel="noopener noreferrer"
+															className="text-blue-400 hover:underline"
+														>
+															<TwitterLogoIcon />
+														</a>
+													)}
+												</div>
+											) : field === 'occupation' ? (
+												<span>{content}</span>
+											) : field === 'interests' ? (
+												<div className="flex flex-wrap gap-1">
+													{content.map((interest: string, index: number) => (
+														<span
+															key={index}
+															className={`px-2 py-1 rounded-full text-xs font-semibold ${getInterestColor(
+																index
+															)}`}
+														>
+															{interest}
+														</span>
+													))}
+												</div>
+											) : (
+												renderCell(content)
+											)}
+										</div>
+									</Table.Cell>
 								);
 							})}
-							<Table.Cell></Table.Cell>
+							<Table.Cell className="py-3 px-4"></Table.Cell>
 						</Table.Row>
 					))}
 				</Table.Body>

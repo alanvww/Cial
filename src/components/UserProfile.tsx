@@ -33,9 +33,9 @@ export function UserProfile({ user }: UserProfileProps) {
 
 				<Text weight="bold">Custom Fields:</Text>
 				<Text>Occupation: {user.customFields.occupation}</Text>
-				<Text>LinkedIn: {user.customFields.socialMedia.linkedin}</Text>
-				<Text>Twitter: {user.customFields.socialMedia.twitter}</Text>
-				<Text>Interests: {user.customFields.interests.join(', ')}</Text>
+				<Text>LinkedIn: {user.customFields.socialMedia?.linkedin}</Text>
+				<Text>Twitter: {user.customFields.socialMedia?.twitter}</Text>
+				<Text>Interests: {user.customFields.interests?.join(', ')}</Text>
 
 				<Text weight="bold">Metrics:</Text>
 				<Text>Login Count: {user.metrics.loginCount}</Text>
