@@ -3,6 +3,8 @@
 
 import { Table } from '@radix-ui/themes';
 import { User } from '@/types';
+import { Button } from '@radix-ui/themes';
+import { Plus } from 'lucide-react';
 
 interface TableProps {
 	users: User[];
@@ -16,7 +18,7 @@ export function TableView({ users, onUserClick, customFields }: TableProps) {
 	};
 
 	return (
-		<Table.Root variant="surface">
+		<Table.Root variant="surface" layout="auto">
 			<Table.Header>
 				<Table.Row>
 					<Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
@@ -26,8 +28,10 @@ export function TableView({ users, onUserClick, customFields }: TableProps) {
 					{customFields.map((field) => (
 						<Table.ColumnHeaderCell key={field}>{field}</Table.ColumnHeaderCell>
 					))}
-					<Table.ColumnHeaderCell>
-						<div className="flex-1">ededfefefe</div>
+					<Table.ColumnHeaderCell justify="center" maxWidth="2rem">
+						<Button className="">
+							<Plus className="mx" />
+						</Button>
 					</Table.ColumnHeaderCell>
 				</Table.Row>
 			</Table.Header>
